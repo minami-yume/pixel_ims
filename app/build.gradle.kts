@@ -67,5 +67,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(libs.hiddenapibypass)
-    implementation(libs.kadb)
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
 }

@@ -5,7 +5,7 @@ import com.takaisaisei.pixelims.domain.Feature
 import com.takaisaisei.pixelims.telephony.TelephonyReflection
 
 /**
- * Minimal `app_process` entry point launched over ADB to read IMS state with shell privileges.
+ * Minimal `app_process` entry point launched by the Shizuku shell service to read IMS state.
  *
  * Runs in a bare JVM (no Android `Context`), so it relies only on the context-free
  * [TelephonyReflection] and reports results on stdout using [BrokerContract].

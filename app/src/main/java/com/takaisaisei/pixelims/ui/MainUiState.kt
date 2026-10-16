@@ -16,15 +16,9 @@ data class MainUiState(
     val knownSlots: Set<Int> = emptySet(),
     /** Slots flagged to re-apply automatically after a reboot. */
     val bootSlots: Set<Int> = emptySet(),
-    /** The device's own Wireless Debugging connect port, discovered via mDNS. */
-    val port: Int? = null,
-    val pairingPort: Int? = null,
     val isAuthorized: Boolean = false,
-    val isWifiConnected: Boolean = false,
     val isApplying: Boolean = false,
 ) {
-    val hasPort: Boolean get() = port != null
-
     /** SIM tabs to render: the detected SIMs, or just the first slot before the poll has run. */
     val slotTabs: List<Int> get() = knownSlots.sorted().ifEmpty { listOf(0) }
 

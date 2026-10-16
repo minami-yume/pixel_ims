@@ -111,7 +111,7 @@ private val COSMETIC_TOGGLES: List<Feature> =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    onEnableWirelessDebugging: () -> Unit,
+    onRequestShizuku: () -> Unit,
     viewModel: MainViewModel = viewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -143,7 +143,7 @@ fun MainScreen(
                 item {
                     SetupCard(
                         state = state,
-                        onEnableWirelessDebugging = onEnableWirelessDebugging,
+                        onRequestShizuku = onRequestShizuku,
                     )
                 }
             } else {
@@ -407,7 +407,7 @@ private fun SettingsCard(
 @Composable
 private fun SetupCard(
     state: MainUiState,
-    onEnableWirelessDebugging: () -> Unit,
+    onRequestShizuku: () -> Unit,
 ) {
     OutlinedCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -427,27 +427,11 @@ private fun SetupCard(
             StepRow(
                 title = stringResource(R.string.step1_title),
                 description = stringResource(R.string.step1_desc),
-                chipText = stringResource(
-                    if (state.isWifiConnected) R.string.status_connected else R.string.status_disconnected,
-                ),
-                chipTone = if (state.isWifiConnected) StatusTone.POSITIVE else StatusTone.NEGATIVE,
-            )
-
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-
-            val (step2Desc, step2Chip, step2Tone) = if (state.hasPort) {
-                Triple(R.string.step2_state_unpaired, R.string.badge_unpaired, StatusTone.WARNING)
-            } else {
-                Triple(R.string.step2_state_off, R.string.badge_not_connected, StatusTone.NEUTRAL)
-            }
-            StepRow(
-                title = stringResource(R.string.step2_title),
-                description = stringResource(step2Desc),
-                chipText = stringResource(step2Chip),
-                chipTone = step2Tone,
+                chipText = stringResource(if (state.isAuthorized) R.string.status_connected else R.string.status_disconnected),
+                chipTone = if (state.isAuthorized) StatusTone.POSITIVE else StatusTone.NEGATIVE,
             )
             OutlinedButton(
-                onClick = onEnableWirelessDebugging,
+                onClick = onRequestShizuku,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
@@ -458,12 +442,12 @@ private fun SetupCard(
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
-                    text = stringResource(R.string.enable_wireless_debugging),
+                    text = stringResource(R.string.request_shizuku),
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }
             Text(
-                text = stringResource(R.string.setup_pairing_hint),
+                text = stringResource(R.string.setup_shizuku_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 12.dp),

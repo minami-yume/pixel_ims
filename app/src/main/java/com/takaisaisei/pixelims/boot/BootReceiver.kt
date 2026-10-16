@@ -3,9 +3,7 @@ package com.takaisaisei.pixelims.boot
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
@@ -23,7 +21,6 @@ class BootReceiver : BroadcastReceiver() {
 
         val request = OneTimeWorkRequestBuilder<ReapplyWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .setConstraints(Constraints(requiredNetworkType = NetworkType.CONNECTED))
             .build()
 
         WorkManager.getInstance(context)

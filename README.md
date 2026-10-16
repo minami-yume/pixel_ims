@@ -16,10 +16,9 @@ Wi-Fi calling (VoWiFi) and more, configured per SIM.
 
 ## How it works
 
-There is no public API to change carrier config, so the app borrows shell privileges locally:
+There is no public API to change carrier config, so the app uses shell privileges supplied by a Shizuku-compatible service:
 
-1. It connects to the phone's **own Wireless Debugging** endpoint over loopback ADB (via
-   [kadb](https://github.com/FlyfishXu/kadb)) — the port is discovered automatically with mDNS.
+1. It requests authorization through the [Shizuku API](https://github.com/RikkaApps/Shizuku-API), compatible with standard Shizuku and Sui. ShizukuPlus works through its Drop-in build or the ShizukuPlus Compat Hub.
 2. It launches a small `Instrumentation` that adopts the shell
    permission identity and calls `CarrierConfigManager.overrideConfig` for the selected SIM.
 3. Status is read back with the same shell privileges via a lightweight `app_process` tool.
@@ -30,8 +29,7 @@ There is no public API to change carrier config, so the app borrows shell privil
 
 ## Usage
 
-1. Open the app and follow the setup card: enable Wireless Debugging and enter the pairing code
-   from the system dialog (you can type it straight from the notification).
+1. Install and start Shizuku or Sui, open the app and grant Pixel IMS authorization when prompted. For ShizukuPlus, use its Drop-in build or install its Compat Hub. For standard Shizuku without root, start its service using its documented setup.
 2. Pick a SIM, toggle the features you want, and tap **Apply**.
 3. Optionally enable **Apply on boot** so the configuration survives restarts.
 4. Use **Restore** to return a SIM to its carrier defaults.
@@ -40,3 +38,11 @@ There is no public API to change carrier config, so the app borrows shell privil
 
 This tool changes low-level telephony configuration on your own device. Whether a feature actually
 works still depends on your carrier and network. Use at your own risk.
+
+## Fork changes
+
+This repository is a fork of Pixel IMS. This fork replaces the original Wireless Debugging pairing
+and loopback ADB authorization flow with Shizuku UserService authorization. It supports standard
+Shizuku and Sui through the Shizuku API, and ShizukuPlus through its Drop-in build or Compat Hub.
+The existing IMS instrumentation, shell commands, status polling, permission grants, and apply-on-boot
+behavior are retained; boot re-apply no longer depends on Wi-Fi or mDNS discovery.
